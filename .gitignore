@@ -1,0 +1,17 @@
+# Compilação do Maven
+target/
+*.egg-info
+
+# Configurações do VS Code
+.vscode/
+.factorypath
+.project
+.classpath
+.settings/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

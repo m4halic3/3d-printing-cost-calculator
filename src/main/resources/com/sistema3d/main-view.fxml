@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<HBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sistema3d.MainController" style="-fx-padding: 20;">
+    <VBox spacing="10" prefWidth="350">
+        <Label text="Configurações do Projeto" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+        <Label text="Impressora 3D:"/>
+        <ComboBox fx:id="comboImpressora" prefWidth="300" onAction="#handleImpressoraSelecionada"/>
+        <Label text="Nome do Arquivo STL:"/>
+        <TextField fx:id="txtNomeArquivo" text="suporte-celular.stl"/>
+        <Label text="Quantidade de Material (g):"/>
+        <TextField fx:id="txtMaterialGramas" text="120"/>
+        <Label text="Tempo de Impressão (horas):"/>
+        <TextField fx:id="txtTempoHoras" text="5"/>
+        <Label text="Tipo de Material:"/>
+        <ComboBox fx:id="comboMaterial" prefWidth="300"/>
+        <CheckBox fx:id="chkFalha" text="Considerar taxa de falha (+10% material)" selected="false"/>
+        <CheckBox fx:id="chkMargem" text="Aplicar Margem de Lucro (30%)" selected="true"/>
+        <Button text="Calcular Custos" onAction="#handleCalcular" prefWidth="300" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </VBox>
+
+    <Separator orientation="VERTICAL"/>
+
+    <VBox spacing="15" prefWidth="400" alignment="TOP_CENTER">
+        <Label text="Visualização e Resumo" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+        <ImageView fx:id="imgImpressora" fitWidth="200" fitHeight="200" preserveRatio="true"/>
+        <Label fx:id="lblDescricao" wrapText="true" style="-fx-font-style: italic; -fx-text-alignment: center;"/>
+        <GridPane hgap="10" vgap="8" style="-fx-background-color: #f4f4f4; -fx-padding: 15; -fx-background-radius: 5;">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="180"/>
+                <ColumnConstraints prefWidth="150"/>
+            </columnConstraints>
+            <Label text="Custo do Material:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label fx:id="lblCustoMaterial" text="R$ 0,00" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+            <Label text="Custo da Máquina:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label fx:id="lblCustoMaquina" text="R$ 0,00" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+            <Label text="Custo de Energia:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Label fx:id="lblCustoEnergia" text="R$ 0,00" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+            <Label text="Custo de Mão de Obra:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <Label fx:id="lblCustoMaoObra" text="R$ 0,00" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+            <Label text="Custo de Manutenção:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <Label fx:id="lblCustoManutencao" text="R$ 0,00" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+            <Separator GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+            <Label text="CUSTO TOTAL:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblCustoTotal" text="R$ 0,00" GridPane.rowIndex="6" GridPane.columnIndex="1" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #d32f2f;"/>
+            <Label text="Preço de Venda Sugerido:" GridPane.rowIndex="7" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblPrecoVenda" text="R$ 0,00" GridPane.rowIndex="7" GridPane.columnIndex="1" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #388E3C;"/>
+        </GridPane>
+    </VBox>
+</HBox>
