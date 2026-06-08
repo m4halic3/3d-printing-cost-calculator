@@ -1,6 +1,6 @@
 package com.sistema3d;
 
-import java.io.InputStream;
+import java.net.URL;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -35,11 +35,11 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        // Impressoras Hardcoded do enunciado (Corrigido de ComboBoxImpressora3D para Impressora3D)
+        // Impressoras Hardcoded com a extensão corrigida para .jpeg
         comboImpressora.getItems().addAll(
-            new Impressora3D("Ender 3", 1500.00, 350, "ender3.png", "Impressora de entrada, ótima para filamentos básicos."),
-            new Impressora3D("Creality K1", 3500.00, 500, "k1.png", "Alta velocidade de impressão com estrutura fechada CoreXY."),
-            new Impressora3D("Bambu Lab A1", 4200.00, 400, "bambu_a1.png", "Excelente qualidade de impressão e calibração automática robusta.")
+            new Impressora3D("Ender 3", 1500.00, 350, "ender3.jpeg", "Impressora de entrada, ótima para filamentos básicos."),
+            new Impressora3D("Creality K1", 3500.00, 500, "creality_k1.jpeg", "Alta velocidade de impressão com estrutura fechada CoreXY."),
+            new Impressora3D("Bambu Lab A1", 4200.00, 400, "bambu_a1.jpeg", "Excelente qualidade de impressão e calibração automática robusta.")
         );
 
         // Materiais Hardcoded do enunciado
@@ -62,13 +62,17 @@ public class MainController {
             lblDescricao.setText(selecionada.getDescricao() + " (" + selecionada.getPotencia() + "W)");
             try {
                 String caminhoImg = "/com/sistema3d/images/" + selecionada.getNomeImagem();
-                InputStream is = getClass().getResourceAsStream(caminhoImg);
-                if (is != null) {
-                    imgImpressora.setImage(new Image(is));
+                URL recurso = getClass().getResource(caminhoImg);
+                
+                if (recurso != null) {
+                    // Método robusto que funciona perfeitamente com module-info.java
+                    imgImpressora.setImage(new Image(recurso.toExternalForm()));
                 } else {
+                    System.out.println("Aviso: Imagem não encontrada no caminho: " + caminhoImg);
                     imgImpressora.setImage(null);
                 }
             } catch (Exception e) {
+                System.err.println("Erro ao carregar a imagem: " + e.getMessage());
                 imgImpressora.setImage(null);
             }
         }
@@ -80,8 +84,14 @@ public class MainController {
             Impressora3D imp = comboImpressora.getSelectionModel().getSelectedItem();
             MaterialImpressao mat = comboMaterial.getSelectionModel().getSelectedItem();
             
-            double gramas = Double.parseDouble(txtMaterialGramas.getText());
-            double horas = Double.parseDouble(txtTempoHoras.getText());
+            // Validação básica se os campos estão preenchidos antes do parse
+            if (txtMaterialGramas.getText().isBlank() || txtTempoHoras.getText().isBlank()) {
+                mostrarAlertaErro("Campos vazios", "Por favor, preencha os campos de peso e tempo.");
+                return;
+            }
+
+            double gramas = Double.parseDouble(txtMaterialGramas.getText().trim());
+            double horas = Double.parseDouble(txtTempoHoras.getText().trim());
             String nome = txtNomeArquivo.getText();
 
             ProjetoImpressao projeto = new ProjetoImpressao(
@@ -90,7 +100,7 @@ public class MainController {
 
             ResumoCusto resumo = CalculadoraCusto.calcular(projeto);
 
-            // Atualiza os valores na tela formatados como moeda
+            // Atualiza os valores na tela formatados como moeda local (R$)
             lblCustoMaterial.setText(String.format("R$ %.2f", resumo.material));
             lblCustoMaquina.setText(String.format("R$ %.2f", resumo.maquina));
             lblCustoEnergia.setText(String.format("R$ %.2f", resumo.energia));
@@ -100,8 +110,15 @@ public class MainController {
             lblPrecoVenda.setText(String.format("R$ %.2f", resumo.venda));
 
         } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Por favor, insira valores numéricos válidos para peso e tempo.", ButtonType.OK);
-            alert.showAndWait();
+            mostrarAlertaErro("Entrada Inválida", "Por favor, insira valores numéricos válidos (use ponto para decimais).");
         }
+    }
+
+    // Método auxiliar para manter o código limpo e reutilizar diálogos de erro
+    private void mostrarAlertaErro(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, mensagem, ButtonType.OK);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }
