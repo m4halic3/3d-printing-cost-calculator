@@ -47,7 +47,7 @@
         </VBox>
         
         <Button text="Calcular Custos" onAction="#handleCalcular" prefWidth="360" 
-                style="-fx-background-color: #0EA5E9; -fx-background-radius: 8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-padding: 12; -fx-cursor: hand;"/>
+                style="-fx-background-color: #0EA5E9; -fx-background-radius: 8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-padding: 12; -fx-cursor: hand; -fx-effect: null; -fx-background-insets: 0;"/>
     </VBox>
 
     <Separator orientation="VERTICAL" style="-fx-opacity: 0.1;"/>
@@ -84,8 +84,8 @@
             
             <Separator GridPane.rowIndex="5" GridPane.columnSpan="2" style="-fx-opacity: 0.1; -fx-padding: 5 0 5 0;"/>
             
-            <Label text="CUSTO OPERACIONAL:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #c12b2b;"/>
-            <Label fx:id="lblCustoTotal" text="R$ 0,00" GridPane.rowIndex="6" GridPane.columnIndex="1" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #b40101;"/>
+            <Label text="CUSTO OPERACIONAL:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #ff3737;"/>
+            <Label fx:id="lblCustoTotal" text="R$ 0,00" GridPane.rowIndex="6" GridPane.columnIndex="1" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: rgb(255, 36, 36);"/>
             
             <Label text="PREÇO DE VENDA:" GridPane.rowIndex="7" GridPane.columnIndex="0" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #34D399;"/>
             <Label fx:id="lblPrecoVenda" text="R$ 0,00" GridPane.rowIndex="7" GridPane.columnIndex="1" style="-fx-font-size: 19px; -fx-font-weight: bold; -fx-text-fill: #00a46d;"/>
