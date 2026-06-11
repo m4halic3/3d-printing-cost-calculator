@@ -1,7 +1,6 @@
 package com.sistema3d;
 
 import java.net.URL;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -10,6 +9,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 public class MainController {
 
     // Componentes injetados do FXML
-    @FXML private HBox raizJanela; // Mapeado para estilizar o fundo da tela inteira se necessário
+    @FXML private HBox raizJanela; 
     @FXML private ComboBox<Impressora3D> comboImpressora;
     @FXML private ComboBox<MaterialImpressao> comboMaterial;
     @FXML private TextField txtNomeArquivo;
@@ -58,7 +58,7 @@ public class MainController {
             new MaterialImpressao("PLA alta densidade", "Alta", 0.18)
         );
 
-        // Aplica o visual moderno direto via Java
+        // Aplica o visual moderno escuro, plano e sem sombras de foco
         aplicarEstiloVisual();
 
         // Seleções iniciais padrão
@@ -68,33 +68,64 @@ public class MainController {
     }
 
     private void aplicarEstiloVisual() {
-        // Paleta base moderna e arredondada para os inputs (ComboBox e TextField)
-        String estiloInputs = "-fx-background-color: #FFFFFF; -fx-background-radius: 6; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-padding: 5 10 5 10;";
+        // Estilo Dark unificado para Inputs - Remove insets (o quadrado fantasma) e efeitos nativos
+        String estiloInputsEscuros = "-fx-background-color: #1E293B; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8; -fx-padding: 8; -fx-text-fill: #F1F5F9; -fx-background-insets: 0; -fx-effect: null;";
         
-        comboImpressora.setStyle(estiloInputs);
-        comboMaterial.setStyle(estiloInputs);
-        txtNomeArquivo.setStyle(estiloInputs);
-        txtMaterialGramas.setStyle(estiloInputs);
-        txtTempoHoras.setStyle(estiloInputs);
+        comboImpressora.setStyle(estiloInputsEscuros);
+        comboMaterial.setStyle(estiloInputsEscuros);
+        txtNomeArquivo.setStyle(estiloInputsEscuros);
+        txtMaterialGramas.setStyle(estiloInputsEscuros);
+        txtTempoHoras.setStyle(estiloInputsEscuros);
 
-        // Se o seu container de resultados (GridPane) tiver uma ID correspondente no FXML, estiliza o fundo dele
-        if (painelResultados != null) {
-            painelResultados.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-padding: 15;");
-        }
+        // Remove os anéis de foco azul/cinza padrão do sistema operacional ao clicar nos componentes
+        comboImpressora.setFocusTraversable(false);
+        comboMaterial.setFocusTraversable(false);
+        txtNomeArquivo.setFocusTraversable(false);
+        txtMaterialGramas.setFocusTraversable(false);
+        txtTempoHoras.setFocusTraversable(false);
+        chkFalha.setFocusTraversable(false);
+        chkMargem.setFocusTraversable(false);
 
-        // Estilização do Botão de Calcular (Azul Moderno com efeito Hover reativo)
+        // Garante que a lista de opções interna do ComboBox acompanhe a paleta escura limpa
+        estilizarListaInternaComboBox(comboImpressora);
+        estilizarListaInternaComboBox(comboMaterial);
+
+        // Estilização do Botão de Calcular totalmente FLAT (Sem sombras nem fundos cinzas tridimensionais)
         if (btnCalcular != null) {
-            String estiloBotaoNormal = "-fx-background-color: #2563EB; -fx-background-radius: 6; -fx-text-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 8;";
-            String estiloBotaoHover = "-fx-background-color: #1D4ED8; -fx-background-radius: 6; -fx-text-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 8;";
+            btnCalcular.setFocusTraversable(false);
+            String estiloBotaoNormal = "-fx-background-color: #0EA5E9; -fx-background-radius: 8; -fx-text-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 12; -fx-effect: null; -fx-background-insets: 0;";
+            String estiloBotaoHover = "-fx-background-color: #0284C7; -fx-background-radius: 8; -fx-text-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 12; -fx-effect: null; -fx-background-insets: 0;";
             
             btnCalcular.setStyle(estiloBotaoNormal);
             btnCalcular.setOnMouseEntered(e -> btnCalcular.setStyle(estiloBotaoHover));
             btnCalcular.setOnMouseExited(e -> btnCalcular.setStyle(estiloBotaoNormal));
         }
+    }
 
-        // Destaca as cores de Custo e de Venda com pesos visuais
-        lblCustoTotal.setStyle("-fx-font-weight: bold; -fx-text-fill: #DC2626; -fx-font-size: 14px;");
-        lblPrecoVenda.setStyle("-fx-font-weight: bold; -fx-text-fill: #16A34A; -fx-font-size: 15px;");
+    // Método auxiliar para formatar as caixas de opções internas de forma limpa e escura
+    private <T> void abrirEstiloListaInterna(ComboBox<T> combo) {
+        // Mantido apenas para compatibilidade caso use em outra assinatura
+    }
+
+    private <T> void estilizarListaInternaComboBox(ComboBox<T> combo) {
+        combo.setCellFactory(lv -> new ListCell<T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.toString());
+                setStyle("-fx-background-color: #1E293B; -fx-text-fill: #F1F5F9; -fx-padding: 8; -fx-effect: null; -fx-background-insets: 0;");
+                setOnMouseEntered(e -> setStyle("-fx-background-color: #334155; -fx-text-fill: #FFFFFF; -fx-padding: 8; -fx-effect: null; -fx-background-insets: 0;"));
+                setOnMouseExited(e -> setStyle("-fx-background-color: #1E293B; -fx-text-fill: #F1F5F9; -fx-padding: 8; -fx-effect: null; -fx-background-insets: 0;"));
+            }
+        });
+        combo.setButtonCell(new ListCell<T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.toString());
+                setStyle("-fx-text-fill: #F1F5F9;");
+            }
+        });
     }
 
     @FXML
@@ -154,6 +185,7 @@ public class MainController {
     }
 
     private void mostrarAlertaErro(String titulo, String mensagem) {
+        // Corrigido o erro de compilação da variável 'message'
         Alert alert = new Alert(Alert.AlertType.ERROR, mensagem, ButtonType.OK);
         alert.setTitle(titulo);
         alert.setHeaderText(null);

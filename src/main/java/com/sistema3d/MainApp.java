@@ -11,10 +11,16 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        
+        // Modificado: Definido o tamanho inicial da cena para 1024px de largura por 680px de altura
+        Scene scene = new Scene(fxmlLoader.load(), 1024, 680);
+        
         stage.setTitle("Calculadora de Custos - Impressão 3D");
         stage.setScene(scene);
-        stage.setResizable(false);
+        
+        // Modificado: Permitir que a tela seja redimensionada/maximizada pelo usuário
+        stage.setResizable(true); 
+        
         stage.show();
     }
 
