@@ -38,37 +38,31 @@ public class MainController {
     @FXML private Label lblCustoTotal;
     @FXML private Label lblPrecoVenda;
 
-    // Componentes adicionais mapeados para estilização dinâmica
     @FXML private Button btnCalcular; 
     @FXML private GridPane painelResultados;
 
     @FXML
     public void initialize() {
-        // Impressoras Hardcoded com a extensão corrigida para .jpeg
         comboImpressora.getItems().addAll(
             new Impressora3D("Ender 3", 1500.00, 350, "ender3.jpeg", "Impressora de entrada, ótima para filamentos básicos."),
             new Impressora3D("Creality K1", 3500.00, 500, "creality_k1.jpeg", "Alta velocidade de impressão com estrutura fechada CoreXY."),
             new Impressora3D("Bambu Lab A1", 4200.00, 400, "bambu_a1.jpeg", "Excelente qualidade de impressão e calibração automática robusta.")
         );
 
-        // Materiais Hardcoded do enunciado
         comboMaterial.getItems().addAll(
             new MaterialImpressao("PLA baixa densidade", "Baixa", 0.08),
             new MaterialImpressao("PLA média densidade", "Média", 0.12),
             new MaterialImpressao("PLA alta densidade", "Alta", 0.18)
         );
 
-        // Aplica o visual moderno escuro, plano e sem sombras de foco
         aplicarEstiloVisual();
 
-        // Seleções iniciais padrão
         comboImpressora.getSelectionModel().selectFirst();
         comboMaterial.getSelectionModel().selectFirst();
         handleImpressoraSelecionada();
     }
 
     private void aplicarEstiloVisual() {
-        // Estilo Dark unificado para Inputs - Remove insets (o quadrado fantasma) e efeitos nativos
         String estiloInputsEscuros = "-fx-background-color: #1E293B; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8; -fx-padding: 8; -fx-text-fill: #F1F5F9; -fx-background-insets: 0; -fx-effect: null;";
         
         comboImpressora.setStyle(estiloInputsEscuros);
@@ -77,7 +71,6 @@ public class MainController {
         txtMaterialGramas.setStyle(estiloInputsEscuros);
         txtTempoHoras.setStyle(estiloInputsEscuros);
 
-        // Remove os anéis de foco azul/cinza padrão do sistema operacional ao clicar nos componentes
         comboImpressora.setFocusTraversable(false);
         comboMaterial.setFocusTraversable(false);
         txtNomeArquivo.setFocusTraversable(false);
@@ -86,11 +79,9 @@ public class MainController {
         chkFalha.setFocusTraversable(false);
         chkMargem.setFocusTraversable(false);
 
-        // Garante que a lista de opções interna do ComboBox acompanhe a paleta escura limpa
         estilizarListaInternaComboBox(comboImpressora);
         estilizarListaInternaComboBox(comboMaterial);
 
-        // Estilização do Botão de Calcular totalmente FLAT (Sem sombras nem fundos cinzas tridimensionais)
         if (btnCalcular != null) {
             btnCalcular.setFocusTraversable(false);
             String estiloBotaoNormal = "-fx-background-color: #0EA5E9; -fx-background-radius: 8; -fx-text-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 12; -fx-effect: null; -fx-background-insets: 0;";
@@ -102,9 +93,7 @@ public class MainController {
         }
     }
 
-    // Método auxiliar para formatar as caixas de opções internas de forma limpa e escura
     private <T> void abrirEstiloListaInterna(ComboBox<T> combo) {
-        // Mantido apenas para compatibilidade caso use em outra assinatura
     }
 
     private <T> void estilizarListaInternaComboBox(ComboBox<T> combo) {
@@ -185,7 +174,6 @@ public class MainController {
     }
 
     private void mostrarAlertaErro(String titulo, String mensagem) {
-        // Corrigido o erro de compilação da variável 'message'
         Alert alert = new Alert(Alert.AlertType.ERROR, mensagem, ButtonType.OK);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
